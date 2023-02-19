@@ -14,9 +14,6 @@ if __name__ == '__main__':
     save_crop_path = './Data/Crop'
     os.makedirs(save_crop_path, exist_ok=True)
     
-    # save_crop_path_tensor = './Data/Crop_tensor'
-    # os.makedirs(save_crop_path_tensor, exist_ok=True)
-    
     orig_data_list = [file for file in os.listdir(orig_data_dir) if file.endswith(".dcm")]
     orig_data_list = sorted(orig_data_list)
    
@@ -46,8 +43,5 @@ if __name__ == '__main__':
         crop_dcm_norm = (crop_dcm - crop_dcm.min())/(crop_dcm.max()-crop_dcm.min()) * 255
         crop_dcm_norm = crop_dcm_norm.astype(np.uint8)
         cv2.imwrite(os.path.join(save_crop_path,orig_data).replace('.dcm', '.bmp'), crop_dcm_norm)
-        
-        # crop_dcm_norm = torch.from_numpy(crop_dcm_norm)
-        # torch.save(crop_dcm_norm.unsqueeze(0), os.path.join(save_crop_path_tensor,orig_data).replace('.dcm', '.pt'))
         
         
