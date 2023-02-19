@@ -11,12 +11,13 @@ Endodontic forecasting model by analyzing preoperative dental radiographs
 6. all_label.csv에 눈치껏 추가하기
 
 ## STEP 1. Prepare Preprocessed data and Crop data for Original data.
+integrate code for preprocess and crop.
 ```
 python preprocessing.py
 ```
 
 ## STEP 2. Train & Test
-main.py에서 exp_name 바꿔가면서 실험하기.
+main.py에서 exp_name 바꿔가면서 실험하기. exp_name은 그냥 output 폴더 생성 경로 이름.
 ```
 python main.py 
 ```
