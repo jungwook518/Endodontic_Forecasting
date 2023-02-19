@@ -10,25 +10,18 @@ Endodontic forecasting model by analyzing preoperative dental radiographs
 6. Orignal, Mask, Preprocessed에 속하는 파일이름은 같은 쌍끼리 같은 이름으로 작성하고 덮어쓰기 유의하기.
 6. all_label.csv에 눈치껏 추가하기
 
-## STEP 1. Prepare Crop data for Original data.
+## STEP 1. Prepare Preprocessed data and Crop data for Original data.
 ```
-python crop.py
-```
-
-## STEP 2. Prepare Preprocessed data for Crop data.
-Not Yet
-```
-Not Yet
+python preprocessing.py
 ```
 
-## STEP 3. Train & Test
+## STEP 2. Train & Test
 main.py에서 exp_name 바꿔가면서 실험하기.
 ```
 python main.py 
 ```
 
-
-## STEP 4. Check Model & Score & Log
+## STEP 3. Check Model & Score & Log
 each best model file save location
 ```
 ./result/exp_name/model
