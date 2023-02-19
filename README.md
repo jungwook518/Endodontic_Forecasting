@@ -7,16 +7,30 @@ Endodontic forecasting model by analyzing preoperative dental radiographs
 01.Inputs/Preprocessed/{P-1,...P-682}.dcm 데이터 ```./Data/Preprocessed/``` 위치로 옮기기
 
 ## STEP 1. Crop Original data.
-```python crop.py ```
+```
+python crop.py
+```
 
 ## STEP 2. Train & Test
-```python main.py ```
 main.py에서 exp_name 바꿔가면서 실험하기.
+```
+python main.py 
+```
+
 
 ## STEP 3. Check Model & Score & Log
-```./result/exp_name/model``` each best model file save location
-```./result/exp_name/score``` each best model score save location
-```./result/exp_name/figure```loss and acc during training save location
+each best model file save location
+```
+./result/exp_name/model
+``` 
+each best model score save location
+```
+./result/exp_name/score
+``` 
+loss and acc during training save location
+```
+./result/exp_name/figure
+```
 
 
 
