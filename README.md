@@ -4,7 +4,7 @@ Endodontic forecasting model by analyzing preoperative dental radiographs
 ## STEP 0. Prepare Base Data
 1. 01.Inputs/{P-1,...P-682}.bmp 데이터 ```./Data/Mask/``` 위치로 옮기기
 2. 01.Inputs/{P-1,...P-682}.dcm 데이터 ```./Data/Original/``` 위치로 옮기기
-3. 01.Inputs/Preprocessed/{P-1,...P-682}.dcm 데이터 ```./Data/Preprocessed/``` 위치로 옮기기
+3. 01.Inputs/Preprocessed/{P-1,...P-682}.bmp 데이터 ```./Data/Preprocessed/``` 위치로 옮기기
 
 ## STEP 1. Crop Original data.
 ```
