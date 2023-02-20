@@ -32,9 +32,9 @@ def generate_data_list(label_csv,train_valid_test_ratio):
                 pass
             else:
                 if label_file['Result'][i]==1:
-                    fail_data.append(label_file['PatientID_new'][i]+'.bmp')
+                    fail_data.append(label_file['PatientID_new'][i]+'.pt')
                 elif label_file['Result'][i]==0:
-                    success_data.append(label_file['PatientID_new'][i]+'.bmp')
+                    success_data.append(label_file['PatientID_new'][i]+'.pt')
         else:
             status_eq_0+=1
     
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     # ============================================================================== #
     #                        1. Load Data
     # ============================================================================== #
-    label_csv = './all_label.csv'
+    label_csv = './sample_label.csv'
     
     train_valid_test_ratio = {'train':80,
                               'valid':10,
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     }
     
     
-    preprocessed_data_dir='./Data/Preprocessed'
-    crop_data_dir='./Data/Crop'
+    preprocessed_data_dir='./Data/Preprocessed_tensor'
+    crop_data_dir='./Data/Crop_tensor'
     
     dataset={'train': DentalDataset(preprocessed_data_dir=preprocessed_data_dir,
                                     crop_data_dir=crop_data_dir,
@@ -249,13 +249,5 @@ if __name__ == '__main__':
     
     acc3,confusion_matrix3=test_model(f1model,dataloaders,device_cpu,os.path.join(score_save_path,'f1Atten2_'+base_name+'.txt'))
     acc4,confusion_matrix4=test_model(f1model_later,dataloaders,device_cpu,os.path.join(score_save_path,'f1Atten2_later_'+base_name+'.txt'))
-    
-    import pdb
-    pdb.set_trace()
-    print("test")
-    
-    
-    
-    
     
     
