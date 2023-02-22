@@ -136,7 +136,7 @@ if __name__ == '__main__':
     # ============================================================================== #
     #                        1. Load Data
     # ============================================================================== #
-    label_csv = './sample_label.csv'
+    label_csv = './all_label.csv'
     
     train_valid_test_ratio = {'train':80,
                               'valid':10,
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     }
     
     
-    preprocessed_data_dir='./Data/Preprocessed_tensor'
-    crop_data_dir='./Data/Crop_tensor'
+    preprocessed_data_dir='./Data/Preprocessed'
+    crop_data_dir='./Data/Crop'
     
     dataset={'train': DentalDataset(preprocessed_data_dir=preprocessed_data_dir,
                                     crop_data_dir=crop_data_dir,
