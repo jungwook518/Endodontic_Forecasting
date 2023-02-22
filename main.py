@@ -32,9 +32,9 @@ def generate_data_list(label_csv,train_valid_test_ratio):
                 pass
             else:
                 if label_file['Result'][i]==1:
-                    fail_data.append(label_file['PatientID_new'][i]+'.pt')
+                    fail_data.append(label_file['PatientID_new'][i]+'.bmp')
                 elif label_file['Result'][i]==0:
-                    success_data.append(label_file['PatientID_new'][i]+'.pt')
+                    success_data.append(label_file['PatientID_new'][i]+'.bmp')
         else:
             status_eq_0+=1
     
