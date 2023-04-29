@@ -66,8 +66,8 @@ if __name__ == '__main__':
         #         else:
         #             mask[i][j]=255
         idx_ = np.where(crop_dcm<=np.mean(centers[0:2]))
-        for i in range(len(idx_)):
-            tmp_arr.append(crop_dcm[idx_[i][0],idx_[i][1]])
+        for i in range(len(idx_[0])):
+            tmp_arr.append(crop_dcm[idx_[0][i],idx_[0][i]])
         tmp_arr=np.array(tmp_arr)
         mask[crop_dcm > np.mean(centers[0:2])] = 255
         
