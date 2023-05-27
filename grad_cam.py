@@ -48,7 +48,7 @@ def make_seed(random_seed):
     random.seed(random_seed)
 
 
-def grad_CAM(model,classes,dataloader,path):
+def grad_CAM(model,classes,dataloader,preprocessed_data_dir,grad_cam_save_path):
     
     for img,label,file_name in dataloader:
 
@@ -95,7 +95,7 @@ def grad_CAM(model,classes,dataloader,path):
         plt.show()'''
         
 
-        img_new = cv2.imread(os.path.join(path,file_name[0]+'.bmp'))
+        img_new = cv2.imread(os.path.join(preprocessed_data_dir,file_name[0]+'.bmp'))
         heatmap = cv2.resize(np.array(heatmap), (img_new.shape[1], img_new.shape[0]),interpolation=cv2.INTER_LINEAR)
 
         heatmap = np.uint8(255 * heatmap)
@@ -113,7 +113,8 @@ def grad_CAM(model,classes,dataloader,path):
         axarr[2].axis('off')
 
 
-        plt.show()
+        # plt.show()
+        plt.savefig(os.path.join(grad_cam_save_path,file_name[0]+'.png'))
 
 
 if __name__ == '__main__':
@@ -144,6 +145,10 @@ if __name__ == '__main__':
     # ============================================================================== #
 
     label_csv = './all_label.csv'
+    preprocessed_data_dir='./Data/Preprocessed'
+    crop_data_dir='./Data/Crop'
+    grad_cam_save_path = './result/' + exp_name +'/grad_cam'
+    os.makedirs(grad_cam_save_path, exist_ok=True)
 
     k = 5
     label_file = pd.read_csv(label_csv, sep=',', header=0, encoding="CP949")
@@ -173,9 +178,7 @@ if __name__ == '__main__':
         }
 
 
-        preprocessed_data_dir='./Data/Preprocessed'
-        crop_data_dir='./Data/Crop'
-
+        
         dataset={'train': DentalDataset(preprocessed_data_dir=preprocessed_data_dir,
                                         crop_data_dir=crop_data_dir,
                                         data_list=data_list['train'],
@@ -211,62 +214,17 @@ if __name__ == '__main__':
         # ============================================================================== #
         #                        3. Define Model & Setting save path
         # ============================================================================== #
-        import pdb
+
         
-        model2 = Net2().to(device)
+        model = Net2().to(device)
         # if you want to use pre-trained model for initialization, like below.
         # model.load_state_dict(torch.load("./result/5foldexp_0010/model/accf1Atten2_fold_05_05-25-16-32.pt",map_location=device))
-        model2.eval()
-        model=Net_CAM(model2)
-        model=model.to(device)
         model.eval()
+        grad_cam_model=Net_CAM(model)
+        grad_cam_model=grad_cam_model.to(device)
+        grad_cam_model.eval()
 
-        grad_cam_save_path = './result/' + exp_name +'/grad_cam'
-        os.makedirs(grad_cam_save_path, exist_ok=True)
-        # grad_CAM(model,['Success','Fail'],dataloaders['test'],test_path)
-        classes = ['Success','Fail']
-        path = './Data/Preprocessed'
-        for img,label,file_name in dataloaders['test']:
-          img=img.to(device)
-          pred=model(img)
-          pred_class=model(img).argmax(dim=1)
-
-
-          print('*'*40)
-          print('Patient ID : ',file_name[0])
-          print('Label : ',classes[label[0]])
-          print('Predicted Class : ',classes[pred_class[0]])
-          pred[:,pred_class[0]].backward()
-          gradients=model.get_activations_gradient()
-          pooled_gradients = torch.mean(gradients, dim=[0, 2, 3])
-          activations = model.get_activations(img).detach()
-
-          for i in range(0,16):
-              activations[:, i, :, :] *= pooled_gradients[i]  
-          pdb.set_trace()
-          heatmap = torch.mean(activations, dim=1).squeeze()
-          heatmap = np.maximum(heatmap.cpu(), 0)
-          heatmap /= torch.max(heatmap)
-
-
-          img_new = cv2.imread(os.path.join(path,file_name[0]+'.bmp'))
-          heatmap = cv2.resize(np.array(heatmap), (img_new.shape[1], img_new.shape[0]),interpolation=cv2.INTER_LINEAR)
-
-          heatmap = np.uint8(255 * heatmap)
-          heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-          heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
-
-          superimposed_img = np.uint8(heatmap * 0.2 + img_new*0.8)
-
-          f, axarr = plt.subplots(1,3)
-          axarr[0].imshow(img_new)
-          axarr[0].axis('off')
-          axarr[1].imshow(heatmap)
-          axarr[1].axis('off')
-          axarr[2].imshow(superimposed_img)
-          axarr[2].axis('off')
-
-
-          # plt.show()
-          plt.savefig(os.path.join(grad_cam_save_path,file_name[0]+'.png'))
+        
+        grad_CAM(grad_cam_model,['Success','Fail'],dataloaders['test'],preprocessed_data_dir,grad_cam_save_path)
+        
       
