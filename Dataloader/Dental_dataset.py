@@ -21,6 +21,7 @@ class DentalDataset(Dataset):
 
     def __getitem__(self, idx):
         data_file = self.data_list[idx][0]
+        file_name,ext=os.path.splitext(data_file)
         data_label = self.data_list[idx][1]
         preprocessed_data_img=Image.open(os.path.join(self.preprocessed_data_dir,data_file))
         crop_data_img=Image.open(os.path.join(self.crop_data_dir,data_file))
@@ -57,6 +58,6 @@ class DentalDataset(Dataset):
         crop_data_img=self.normalize['original'](crop_data_img)
         
         #final sample to return 
-        sample=(torch.cat((preprocessed_data_img,crop_data_img),0), int(data_label),data_file)
+        sample=(torch.cat((preprocessed_data_img,crop_data_img),0), int(data_label),file_name)
         
         return sample

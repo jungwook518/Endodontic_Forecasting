@@ -7,6 +7,118 @@ import torch.nn.functional as F
 import copy
 import numpy as np
 
+class Net_CAM(nn.Module):
+    def __init__(self,model):
+        super(Net_CAM,self).__init__()
+        self.conv0=model.conv0
+        self.bn=model.bn
+        self.maxpool0=model.maxpool0
+        self.relu=model.relu
+
+        self.layer1=model.layer1
+        self.layer2=model.layer2
+        self.layer_downsample1=model.layer_downsample1
+        
+        self.attention_matmul=model.attention_matmul
+        
+        self.layer3=model.layer3
+        self.layer4=model.layer4
+        self.layer_downsample2=model.layer_downsample2
+        
+        self.layer5=model.layer5
+        self.layer6=model.layer6
+        self.layer_downsample3=model.layer_downsample3
+        
+        self.layer7=model.layer7
+        self.layer8=model.layer8
+        self.layer_downsample4=model.layer_downsample4
+
+        self.avgpool=model.avgpool
+        self.fc=model.fc
+        
+        self.gradients=None
+        
+    def activations_hook(self,grad):
+        self.gradients=grad
+        
+    def forward(self,x):
+        x=self.conv0(x)
+        x=self.bn(x)
+        x=self.maxpool0(x)
+        x=self.relu(x)
+
+        layer_identity1=x
+        x=self.layer1(x)
+        x=self.layer2(x)
+        x=x.clone()+self.layer_downsample1(layer_identity1)
+        
+        x=self.attention_matmul(x)
+        x=self.relu(x)
+
+        layer_identity2=x
+        x=self.layer3(x)
+        x=self.layer4(x)
+        x=x.clone()+self.layer_downsample2(layer_identity2)
+
+        layer_identity3=x
+        x=self.layer5(x)     
+        x=self.layer6(x)
+        x=x.clone()+self.layer_downsample3(layer_identity3)
+        
+        layer_identity4=x
+        x=self.layer7(x)
+        x=self.layer8(x)
+        x=x.clone()+self.layer_downsample4(layer_identity4)
+
+        h=x.register_hook(self.activations_hook)
+        
+        x=self.avgpool(x)
+        x=x.view(-1,self.num_flat_features(x))
+        x=self.fc(x)
+        
+        return x
+    
+    def num_flat_features(self,x):
+        size=x.size()[1:]
+        num_features=1
+        for s in size:
+            num_features*=s
+        
+        return num_features
+        
+    def get_activations_gradient(self):
+        return self.gradients
+    
+    def get_activations(self,x):      
+        x=self.conv0(x)
+        x=self.bn(x)
+        x=self.maxpool0(x)
+        x=self.relu(x)
+
+        layer_identity1=x
+        x=self.layer1(x)
+        x=self.layer2(x)
+        x=x.clone()+self.layer_downsample1(layer_identity1)
+        
+        x=self.attention_matmul(x)
+        x=self.relu(x)
+
+        layer_identity2=x
+        x=self.layer3(x)
+        x=self.layer4(x)
+        x=x.clone()+self.layer_downsample2(layer_identity2)
+
+        layer_identity3=x
+        x=self.layer5(x)
+        x=self.layer6(x)
+        x=x.clone()+self.layer_downsample3(layer_identity3)
+
+        layer_identity4=x
+        x=self.layer7(x)
+        x=self.layer8(x)
+        x=x.clone()+self.layer_downsample4(layer_identity4)
+
+        return x
 class Net2(nn.Module):
     def __init__(self):
         super(Net2,self).__init__()
