@@ -181,8 +181,10 @@ if __name__ == '__main__':
         # ============================================================================== #
         #                        5. Train / Save / Test
         # ============================================================================== #
+        # accf1model, accf1model_later, accmodel, accmodel_later, f1model, f1model_later= \
+                # train_3model2(model, criterion, optimizer, exp_lr_scheduler, dataloaders, dataset_sizes, device, num_epochs=num_epochs, file_name=os.path.join(figure_save_path,'loss_acc_'+base_name+'.png'))
         accf1model, accf1model_later, accmodel, accmodel_later, f1model, f1model_later= \
-                train_3model2(model, criterion, optimizer, exp_lr_scheduler, dataloaders, dataset_sizes, device, num_epochs=num_epochs, file_name=os.path.join(figure_save_path,'loss_acc_'+base_name+'.png'))
+                train_3model_wo_lr_scheduler(model, criterion, optimizer, exp_lr_scheduler, dataloaders, dataset_sizes, device, num_epochs=num_epochs, file_name=os.path.join(figure_save_path,'loss_acc_'+base_name+'.png'))
 
 
         torch.save(accf1model.state_dict(),os.path.join(model_save_path,'accf1Atten2_'+base_name+'.pt'))
