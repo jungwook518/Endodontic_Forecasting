@@ -15,7 +15,7 @@ import shutil
 import time
 from Dataloader.Dental_dataset import DentalDataset
 from Model.models import Net2
-from training_module import train_3model2, test_model
+from training_module import train_3model2, test_model, train_3model_wo_lr_scheduler
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 

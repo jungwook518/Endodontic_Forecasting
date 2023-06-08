@@ -14,7 +14,7 @@ import shutil
 import time
 from Dataloader.Dental_dataset import DentalDataset
 from Model.models import Net2
-from training_module import train_3model2, test_model
+from training_module import train_3model2, test_model, train_3model_wo_lr_scheduler
 
 def generate_data_list(label_csv,train_valid_test_ratio):
     label_file=pd.read_csv(label_csv,sep=',',header=0,encoding = "CP949")
