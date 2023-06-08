@@ -1,4 +1,5 @@
 import os
+import argparse
 import torch
 import torch.nn as nn
 import torchvision
@@ -47,7 +48,16 @@ def make_seed(random_seed):
     random.seed(random_seed)
 
 if __name__ == '__main__':
-
+    parser = argparse.ArgumentParser(description='Run traininig.py')
+    parser.add_argument('--exp_name',
+                        required=True,
+                        type=str,
+                        help="if true, receive data from publisher")
+    parser.add_argument('--learning_rate',
+                        required=True,
+                        type=float,
+                        help="if true, receive data from publisher")
+    args = parser.parse_args()
     RANDOM_SEED=1
     make_seed(RANDOM_SEED)
 
@@ -61,10 +71,10 @@ if __name__ == '__main__':
     print('Device Name : ',torch.cuda.get_device_name(device))
     print('The number of devices: ',torch.cuda.device_count())
 
-    exp_name = '5foldexp_0011'
+    exp_name = args.exp_name
     print("Experiment location in {}. Please Check if exp_name is overlap or not".format(exp_name))
     batch_size = 5
-    learning_rate = 0.0001
+    learning_rate = args.learning_rate
     num_epochs = 5
 
 
